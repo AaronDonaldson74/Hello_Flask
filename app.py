@@ -21,7 +21,7 @@ class Guide(db.Model):
 
 class GuideSchema(ma.Schema):
     class Meta:
-        fields = ('title', 'content')
+        fields = ('title', 'content', 'id')
 
 guide_schema = GuideSchema()
 guides_schema = GuideSchema(many=True)
@@ -66,6 +66,15 @@ def guide_update(id):
 
     db.session.commit()
     return guide_schema.jsonify(guide)
+
+#Endpoint for Deleting a Record
+@app.route("/guide/<id>", methods=["DELETE"])
+def guide_delete(id):
+    guide = Guide.query.get(id)
+    db.session.delete(guide)
+    db.session.commit()
+
+    return "Guide was successfully deleted!"
 
 if __name__ == '__main__':
     app.run(debug=True)
